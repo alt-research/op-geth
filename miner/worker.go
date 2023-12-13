@@ -1077,9 +1077,9 @@ func (w *worker) generateWork(genParams *generateParams) *newPayloadResult {
 	for _, tx := range genParams.txs {
 		from, _ := types.Sender(work.signer, tx)
 		work.state.SetTxContext(tx.Hash(), work.tcount)
-		_, err := w.commitTransaction(work, tx)
-		if err != nil {
-			return &newPayloadResult{err: fmt.Errorf("failed to force-include tx: %s type: %d sender: %s nonce: %d, err: %w", tx.Hash(), tx.Type(), from, tx.Nonce(), err)}
+		if _, err = w.commitTransaction(work, tx); err != nil {
+			log.Warn("failed to force-include tx", "txHash", tx.Hash(), "type", tx.Type(), "sender", from, "nonce", tx.Nonce(), "error", err)
+			continue
 		}
 		work.tcount++
 	}
