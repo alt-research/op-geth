@@ -34,7 +34,7 @@ import (
 )
 
 const (
-	headerCacheLimit = 512
+	headerCacheLimit = 1280
 	numberCacheLimit = 2048
 )
 

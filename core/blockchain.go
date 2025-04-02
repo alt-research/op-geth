@@ -561,14 +561,14 @@ func (bc *BlockChain) loadLastState() error {
 		currentFinalBlock = bc.CurrentFinalBlock()
 	)
 	if headHeader.Hash() != headBlock.Hash() {
-		log.Info("Loaded most recent local header", "number", headHeader.Number, "hash", headHeader.Hash(), "age", common.PrettyAge(time.Unix(int64(headHeader.Time), 0)))
+		log.Info("Loaded most recent local header", "number", headHeader.Number, "hash", headHeader.Hash(), "age", common.PrettyAge(time.Unix(int64(headHeader.MilliTimestamp()), 0)))
 	}
-	log.Info("Loaded most recent local block", "number", headBlock.Number(), "hash", headBlock.Hash(), "age", common.PrettyAge(time.Unix(int64(headBlock.Time()), 0)))
+	log.Info("Loaded most recent local block", "number", headBlock.Number(), "hash", headBlock.Hash(), "age", common.PrettyAge(time.Unix(int64(headBlock.MilliTimestamp()), 0)))
 	if headBlock.Hash() != currentSnapBlock.Hash() {
-		log.Info("Loaded most recent local snap block", "number", currentSnapBlock.Number, "hash", currentSnapBlock.Hash(), "age", common.PrettyAge(time.Unix(int64(currentSnapBlock.Time), 0)))
+		log.Info("Loaded most recent local snap block", "number", currentSnapBlock.Number, "hash", currentSnapBlock.Hash(), "age", common.PrettyAge(time.Unix(int64(currentSnapBlock.MilliTimestamp()), 0)))
 	}
 	if currentFinalBlock != nil {
-		log.Info("Loaded most recent local finalized block", "number", currentFinalBlock.Number, "hash", currentFinalBlock.Hash(), "age", common.PrettyAge(time.Unix(int64(currentFinalBlock.Time), 0)))
+		log.Info("Loaded most recent local finalized block", "number", currentFinalBlock.Number, "hash", currentFinalBlock.Hash(), "age", common.PrettyAge(time.Unix(int64(currentFinalBlock.MilliTimestamp()), 0)))
 	}
 	if pivot := rawdb.ReadLastPivotNumber(bc.db); pivot != nil {
 		log.Info("Loaded last snap-sync pivot marker", "number", *pivot)
@@ -1413,7 +1413,7 @@ func (bc *BlockChain) InsertReceiptChain(blockChain types.Blocks, receiptChain [
 		head    = blockChain[len(blockChain)-1]
 		context = []interface{}{
 			"count", stats.processed, "elapsed", common.PrettyDuration(time.Since(start)),
-			"number", head.Number(), "hash", head.Hash(), "age", common.PrettyAge(time.Unix(int64(head.Time()), 0)),
+			"number", head.Number(), "hash", head.Hash(), "age", common.PrettyAge(time.Unix(int64(head.MilliTimestamp()), 0)),
 			"size", common.StorageSize(size),
 		}
 	)

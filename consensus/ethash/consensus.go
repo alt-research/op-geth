@@ -231,7 +231,7 @@ func (ethash *Ethash) verifyHeader(chain consensus.ChainHeaderReader, header, pa
 			return consensus.ErrFutureBlock
 		}
 	}
-	if header.Time <= parent.Time {
+	if header.MilliTimestamp() <= parent.MilliTimestamp() {
 		return errOlderBlockTime
 	}
 	// Verify the block's difficulty based on its timestamp and parent's difficulty
@@ -542,6 +542,7 @@ func (ethash *Ethash) SealHash(header *types.Header) (hash common.Hash) {
 		header.GasLimit,
 		header.GasUsed,
 		header.Time,
+		header.MixDigest,
 		header.Extra,
 	}
 	if header.BaseFee != nil {

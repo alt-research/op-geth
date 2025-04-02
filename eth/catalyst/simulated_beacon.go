@@ -17,7 +17,6 @@
 package catalyst
 
 import (
-	"crypto/rand"
 	"crypto/sha256"
 	"errors"
 	"fmt"
@@ -186,13 +185,10 @@ func (c *SimulatedBeacon) sealBlock(withdrawals []*types.Withdrawal, timestamp u
 
 	version := payloadVersion(c.eth.BlockChain().Config(), timestamp)
 
-	var random [32]byte
-	rand.Read(random[:])
 	fcResponse, err := c.engineAPI.forkchoiceUpdated(c.curForkchoiceState, &engine.PayloadAttributes{
 		Timestamp:             timestamp,
 		SuggestedFeeRecipient: feeRecipient,
 		Withdrawals:           withdrawals,
-		Random:                random,
 		BeaconRoot:            &common.Hash{},
 	}, version, false)
 	if err != nil {
